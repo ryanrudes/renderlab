@@ -14,8 +14,7 @@ class RenderFrame(gym.Wrapper):
         self.active = True
         self.rgb = rgb
 
-        if not os.path.exists(self.directory):
-            os.mkdir(self.directory)
+        os.makedirs(self.directory, exist_ok = True)
 
         if size is None:
             self.env.reset()
@@ -54,10 +53,10 @@ class RenderFrame(gym.Wrapper):
         self._writer.release()
 
     def reset(self, *args, **kwargs):
-        observation = self.env.reset(*args, **kwargs)
+        data = self.env.reset(*args, **kwargs)
         self._start()
         self._write()
-        return observation
+        return data
 
     def step(self, *args, **kwargs):
         data = self.env.step(*args, **kwargs)
