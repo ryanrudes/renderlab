@@ -17,7 +17,7 @@ pip install renderlab
 import gymnasium as gym
 import renderlab as rl
 
-env = gym.make("CartPole-v1")
+env = gym.make("CartPole-v1", render_mode = "rgb_array")
 env = rl.RenderFrame(env, "./output")
 
 observation, info = env.reset()
