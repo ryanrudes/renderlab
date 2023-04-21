@@ -1,4 +1,4 @@
-# Farama `gymnasium` Rendering for Colaboratory
+# Gymnasium Rendering for Colaboratory
 
 [![PyPI download month](https://img.shields.io/pypi/dm/renderlab.svg)](https://pypi.python.org/pypi/renderlab/)
 [![PyPI - Status](https://img.shields.io/pypi/status/renderlab)](https://pypi.python.org/pypi/renderlab/)
