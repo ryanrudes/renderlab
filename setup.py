@@ -19,7 +19,7 @@ setup(
   name = 'renderlab',
   version = version,
   license = 'MIT',
-  description = 'Render OpenAI Gymnasium environments in Google Colaboratory',
+  description = 'Render Gymnasium environments in Google Colaboratory',
   long_description_content_type = "text/markdown",
   long_description = long_description,
   author = 'Ryan Rudes',
