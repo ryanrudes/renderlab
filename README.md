@@ -20,12 +20,14 @@ import renderlab as rl
 env = gym.make("CartPole-v1")
 env = rl.RenderFrame(env, "./output")
 
-observation = env.reset()
-terminated = False
+observation, info = env.reset()
 
-while not terminated:
+while True:
   action = env.action_space.sample()
-  observation, reward, terminated, info = env.step(action)
+  observation, reward, terminated, truncated, info = env.step(action)
+  
+  if terminated or truncated:
+    break
 
 env.play()
 ```
