@@ -1,9 +1,9 @@
 from IPython.core.display import Video, display
 from moviepy.editor import *
 
+import gymnasium as gym
 import time
 import cv2
-import gym
 import os
 
 class RenderFrame(gym.Wrapper):
@@ -13,12 +13,15 @@ class RenderFrame(gym.Wrapper):
         self.auto_release = auto_release
         self.active = True
         self.rgb = rgb
+        
+        if env.render_mode != "rgb_array":
+            raise Exception("RenderFrame requires environment render mode configured to rgb_array")
 
         os.makedirs(self.directory, exist_ok = True)
 
         if size is None:
             self.env.reset()
-            self.size = self.env.render(mode = 'rgb_array').shape[:2][::-1]
+            self.size = self.env.render().shape[:2][::-1]
         else:
             self.size = size
 
@@ -44,7 +47,7 @@ class RenderFrame(gym.Wrapper):
 
     def _write(self):
         if self.active:
-            frame = self.env.render(mode = 'rgb_array')
+            frame = self.env.render()
             if self.rgb:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             self._writer.write(frame)
@@ -53,19 +56,19 @@ class RenderFrame(gym.Wrapper):
         self._writer.release()
 
     def reset(self, *args, **kwargs):
-        data = self.env.reset(*args, **kwargs)
+        observation, info = self.env.reset(*args, **kwargs)
         self._start()
         self._write()
-        return data
+        return observation, info
 
     def step(self, *args, **kwargs):
-        data = self.env.step(*args, **kwargs)
+        observation, reward, terminated, truncated, info = self.env.step(*args, **kwargs)
         self._write()
 
-        if self.auto_release and data[2]:
+        if self.auto_release and (terminated or truncated):
             self.release()
 
-        return data
+        return observation, reward, terminated, truncated, info
 
     def play(self):
         start = time.time()
